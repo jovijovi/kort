@@ -1,7 +1,9 @@
 kort
 ===================
 
-This is a general program framework. Featrues: C#, WCF, ORM, MySQL, MongoDB.
+This is a simple program framework.
+Featrues: C#, WCF, ORM, MySQL, MongoDB.
+
 Thanks to the open source community. The glory belongs to you.
 
 ### Change Log
