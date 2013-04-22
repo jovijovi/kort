@@ -1,0 +1,7 @@
+/src/win32/bin
+
+/src/win32/kort/Debug
+
+/src/win32/TestDLL_KORT/Debug
+
+/src/win32/TestDLL_KORT/*.user
