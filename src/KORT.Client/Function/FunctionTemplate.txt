@@ -1,0 +1,183 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using KORT.Data;
+using KORT.Network;
+
+/* Todo: 
+(1) replace XXXXX in this whole page to real function name
+(2) in RegisterMethod.cs 
+
+add XXXXX to public enum Functions
+
+add this code to RegistMethod()
+
+            RegistMethod(new Method
+            {
+                MethodName = Functions.XXXXX,
+                CheckRequest = ParameterValidator.XXXXXCheckRequest,
+                CheckResponse = ParameterValidator.XXXXXCheckResponse,
+                Logic = XXXXX
+            });
+(3) finish client, server and validate logic
+(4) clean up
+*/
+
+namespace KORT
+{
+    public static partial class MessageHelper
+    {
+        public static string GetMessage(XXXXXMessageNumber messageNumber, string language)
+        {
+            switch (messageNumber)
+            {
+            	//TODO: delete if only empty
+				case XXXXXMessageNumber.BadParameter:
+                    return "XXXXXMessageNumber.BadParameter";
+                default:
+                    return "";
+            }
+        }
+    }
+
+}
+namespace KORT.Network
+{
+    public class XXXXXRequest
+    {
+    	//TODO
+		public string User { get; set; }
+    }
+    public class XXXXXResult
+    {
+    	//TODO
+		public string UserType { get; set; }
+    }
+
+    public static class XXXXXFieldKeyword
+    {
+    	//TODO
+		public const string User = "User";
+    }
+    public enum XXXXXMessageNumber
+    {
+    	//TODO: delete if only empty
+    }
+
+    public partial class ParameterValidator
+    {
+        public static bool XXXXXCheckRequest(JObject request)
+        {
+            System.Diagnostics.Debug.WriteLine("XXXXXCheckRequest");
+            if (Check(request)
+                && Check(request, XXXXXFieldKeyword.User, JTokenType.String)
+                )//TODO
+                return true;
+            return false;
+        }
+        
+        public static bool XXXXXCheckResponse(JObject response)
+        {
+            System.Diagnostics.Debug.WriteLine("XXXXXCheckResponse");
+            if (Check(response)&& Check(response, FieldKeyword.Success, JTokenType.Boolean))
+            {
+                var success = (bool) response[FieldKeyword.Success];
+                if (CheckContent(response, FieldKeyword.ResultType, ResultType.List, success)
+                    && Check(response, FieldKeyword.Result, JTokenType.Object, success)
+                    //&& Check(response[FieldKeyword.Result], XXXXXFieldKeyword.Token, JTokenType.String, success)
+                    && CheckContent(response, FieldKeyword.ResultType, ResultType.Null, !success)
+                    && Check(response, FieldKeyword.CommonError, JTokenType.String, !success)
+                    && Check(response, FieldKeyword.ErrorDetail, JTokenType.String, !success)
+                    )//TODO
+                    return true;
+            }
+            return false;
+        }
+    }
+
+    public partial class KORTClient
+    {
+        public Response<XXXXXResult> XXXXX(XXXXXRequest requestObject)
+        {
+            JObject request = JObject.FromObject(requestObject);
+            var result = Method(Functions.XXXXX, request, ParameterValidator.XXXXXCheckRequest);
+            try
+            {
+                var response = JsonConvert.DeserializeObject<Response<XXXXXResult>>(result.ToString());
+                //TODO; client logic if need
+                return response;
+            }
+            catch (Exception e)
+            {
+                return Response<XXXXXResult>.BuildResponse(e);
+            }
+        }
+
+        public delegate void KORTClientXXXXXDelegate(Response<XXXXXResult> result);
+        public event KORTClientXXXXXDelegate OnXXXXX;
+        public IAsyncResult BeginXXXXX(XXXXXRequest requestObject)
+        {
+            JObject request = JObject.FromObject(requestObject);
+            return BeginMethod(Functions.XXXXX, request, ParameterValidator.XXXXXCheckRequest, XXXXXCallBackMethod);
+        }
+        private void XXXXXCallBackMethod(IAsyncResult ar)
+        {
+            var dn = (KORTClientMethodDelegate)ar.AsyncState;
+            JObject result = dn.EndInvoke(ar);
+            if (OnXXXXX == null) return;
+
+            try
+            {
+                var response = JsonConvert.DeserializeObject<Response<XXXXXResult>>(result.ToString());
+                //TODO; client logic if need
+                OnXXXXX(response);
+            }
+            catch (Exception e)
+            {
+                OnXXXXX(Response<XXXXXResult>.BuildResponse(e));
+            }
+        }
+    }
+
+    public partial class KORTService
+    {
+        public static void XXXXX(JObject request, ref JObject result, string language, ref Session session)
+        {
+            //TODO; server logic
+            /*
+            User[] users;
+            try
+            {
+                users = JsonConvert.DeserializeObject<User[]>(request[XXXXXFieldKeyword.Users].ToString());
+            }
+            catch (Exception)
+            {
+				AddBadParameterInfo(ref result, Functions.XXXXX, language);
+                return;
+            }
+            
+            string message;
+            if(true)
+            {
+                result.Add(FieldKeyword.Success, true);
+                result.Add(FieldKeyword.ResultType, ResultType.List);
+                var resultObject = new XXXXXResult
+                {
+                    UserType = type.ToString()
+                };
+                result.Add(FieldKeyword.Result, JObject.FromObject(resultObject));
+            }
+            else
+            {
+                AddFailInfo(ref result, ErrorNumber.SeeDetail.ToString(), message);
+            }
+            */
+        }
+    }
+}
+
